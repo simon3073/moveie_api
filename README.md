@@ -1,14 +1,7 @@
-## JS Pokedex Application
+## Movie API
 
-Application that uses an API call to fetch and list Pokemons. Selecting or searching for Pokemons reveals basic details and images.
-
+Movie API allows access to information movies from the 1980's. Users will be able to sign up, update their personal information, and create a list of their favorite 80's movies.
 <br/>
-
-## How to use
-
-- Scroll through list and select on Pokemon to reveal more details
-- Use search bar to look for specific Pokemon
-- Use navigational buttons in pop up to work through the Pokemon list
 
 <br />
 
@@ -18,17 +11,9 @@ _Developer: Simon Bertoli_
 
 ## Project Dependencies
 
+- NodeJS
 - HTML5
-- CSS
-- Javascript / jQuery
-- promise-polyfill
-- Bootstrap 5
-
-<br/>
-
-## APIs Used
-
-The Pokémon API - https://pokeapi.co/api/v2/pokemon/
+- Javascript
 
 <br/>
 
@@ -36,7 +21,7 @@ The Pokémon API - https://pokeapi.co/api/v2/pokemon/
 
 <br/>
 <h2 align="left"><i>Who am I?</i></h2>
-<h3 align="left">I'm Simon Bertoli 👋 - An Old and New developer from Melbourne</h3>
+<h3 align="left">I'm Simon Bertoli 👋 - an Old and New developer from Melbourne</h3>
 
 - 🔭 I’m currently working on **my Full-Stack Web Development Program at Career Foundry**
 
