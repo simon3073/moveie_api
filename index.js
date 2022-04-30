@@ -4,10 +4,10 @@ const app = express();
 
 // GET REQUESTS
 
-// Morgan logging
+// Morgan logging to Terminal
 app.use(morgan('common'));
 
-// Default Response
+// Default Response on / request
 app.get('/', (req, res) => {
 	res.send('80s Movie App');
 });
@@ -24,5 +24,5 @@ app.use(express.static('public'));
 
 // listen for requests
 app.listen(8080, () => {
-	console.log('Your app is listening');
+	console.log('Your app is listening on Port 8080');
 });
