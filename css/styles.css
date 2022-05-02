@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,700");
+body {
+  padding: 0 2em;
+  font-family: Montserrat, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: #444;
+  background: #eee;
+}
+
+h1,
+h2 {
+  font-weight: normal;
+  letter-spacing: -1px;
+  color: #34495e;
+  font-weight: 700;
+}
+
+.api-table {
+  background: #34495e;
+  color: #fff;
+  border-radius: 1em;
+  overflow: hidden;
+  padding: 0.5em;
+  text-align: left;
+}
+
+.api-table th {
+  color: #dd5;
+  padding: 1em;
+  font-size: 1.15em;
+}
+
+.api-table th:nth-child(3) {
+  width: 20px;
+}
+
+.api-table th:nth-child(4) {
+  min-width: 200px;
+}
+
+.api-table td {
+  margin: 0.5em 1em;
+  padding: 0.5em 1.25em 1em 1.25em;
+  vertical-align: baseline;
+  word-break: keep-all;
+}
+
+.api-table td pre {
+  margin: 0 -180px;
+  font-size: 0.8em;
+}
+/*# sourceMappingURL=styles.css.map */

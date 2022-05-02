@@ -1,3 +1,7 @@
+#style/sass 
+*.scss
+*.css.map
+
 # Logs
 logs
 *.log

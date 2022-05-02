@@ -6,11 +6,221 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>80s Movies</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+        <link href="../css/styles.css" rel="stylesheet" type="text/css" />
     </head>
 
     <body>
-        This web application allows access to information about epic movies from the 1980's. Users will be able to sign
-        up, update their personal information, and create a list of their favorite 80's movies.
+        <h1>80s Epics</h1>
+        <p>This web application allows access to information about epic movies from the 1980's. Users will be able to
+            sign up, update their personal information, and create a list of their favorite 80's movies.
+        </p>
+        <br>
+        <h2>API Endpoints</h2>
+        <table class="api-table">
+            <tr>
+                <th>Request</th>
+                <th>URL</th>
+                <th>HTTP Method</th>
+                <th>Request body data format</th>
+                <th>Response body data format</th>
+            </tr>
+            <tr>
+                <td>Get a list of movies</td>
+                <td>/movies</td>
+                <td>GET</td>
+                <td>NONE</td>
+                <td>JSON Object holding data of all the movies</td>
+            </tr>
+            <tr>
+                <td>Get data about a movie</td>
+                <td>/movies/info/[movie]</td>
+                <td>GET</td>
+                <td>NONE</td>
+                <td>JSON Object holding data about a movie. Example:
+                    <pre><code>
+                        {
+                            "Title": "Planes, Trains & Automobiles",
+                            "Year Released": "1987",
+                            "Director": ["John Hughes",
+                            "Description": "A Chicago advertising man must struggle to travel home from 
+                                            New York for Thanksgiving, with a lovable oaf of a shower 
+                                            curtain ring salesman as his only companion."
+                            "imdbRating": 7.6,
+                            "imgURL": '...url.jpg',
+                            "Genre": [
+                                "Comedy", 
+                                "Drama"
+                            ],
+                            "Actor": [
+                                "John Candy",
+                                "Steve Martin"
+                            ]   
+                        }
+                        </code></pre>
+                </td>
+            </tr>
+            <tr>
+                <td>Get information about Director</td>
+                <td>/bio/[director]</td>
+                <td>GET</td>
+                <td>NONE</td>
+                <td>JSON Object holding bio data about director. Example
+                    <pre><code>
+                        {
+                            “Director”: “John Hughes”,
+                            “Born” : "03-18-1950"
+                            "Died" : "08-6-2009",
+                            "Movies directed": [
+                                "Planes, Trains & Automobiles",
+                                "16 Candles",
+                                "The Breakfast Club"
+                            ]
+                        }
+                    </code></pre>
+                </td>
+            </tr>
+            <tr>
+                <td>Search for movies with in a Genre</td>
+                <td>/movies/genre/[genre]</td>
+                <td>GET</td>
+                <td>NONE</td>
+                <td>JSON Object holding data about movies with a specific genre, including genre. Example
+                    <pre><code>
+                        {
+                            “Genre”: “Action”,
+                            “Movies” : [
+                                "Commando",
+                                "Karate Kid",
+                                "Rambo"
+                            ]
+                        }
+                </code></pre>
+                </td>
+            </tr>
+            <tr>
+                <td>Search for movies starring an Actor</td>
+                <td>/movies/actor/[actor]</td>
+                <td>GET</td>
+                <td>NONE</td>
+                <td>JSON Object holding data about movies with a specific actor, including actor. Example
+                    <pre><code>
+                        {
+                            “Actor”: “Molly Ringwald”,
+                            “Movies” : [
+                                "The Breakfast Club",
+                                "Pretty in Pink",
+                                "16 Candles"
+                            ]
+                        }
+                    </code></pre>
+                </td>
+            </tr>
+            <tr>
+                <td>Search movies with a certain IMDB Rating</td>
+                <td>/movies/rating/[rating]</td>
+                <td>GET</td>
+                <td>NONE</td>
+                <td>JSON Object holding data about movies with an IMDB rating above what has been provided, including
+                    rating. Example
+                    <pre><code>
+                        {
+                            “Rating”: “7”,
+                            “Movies” : [
+                                "Bull Durham"
+                                "Karate Kid",
+                                 "Commando"
+                            ]
+                        }
+                    </code></pre>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Create an Account</td>
+                <td>/account</td>
+                <td>POST</td>
+                <td>JSON Object holding data about a new user. Example:
+                    <pre><code>
+                        {
+                            "Name": "Test User",
+                            "Email": "test@user.com",
+                            "Password": "UserPassword-2020",
+                        }
+                    </code></pre>
+                </td>
+                <td>JSON Object holding data about the new user added, including an ID. Example
+                    <pre><code>
+                        {
+                            “id”: 8,
+                            “Name” : “John Smith”,
+                            “Email” : “johnsmith@email.com”,
+                            “Password” : “purpleMonkey-84”,
+                            “Favourite-movies” : []
+                        }
+                    </code></pre>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Get account details</td>
+                <td>/account/[id]</td>
+                <td>GET</td>
+                <td>NONE</td>
+                <td>JSON Object holding data about the logged in user, including an ID. Example
+                    <pre><code>
+                        {
+                           “id”: 8,
+                            “Name” : “John Smith”,
+                            “Email” : “johnsmith@email.com”,
+                            “Password” : “purpleMonkey-84”,
+                            “Favourite-movies” : []
+                        }
+                    </code></pre>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Update an Account</td>
+                <td>/account/[id]</td>
+                <td>PUT</td>
+                <td>JSON Object holding data about a new user. Example:
+                    <pre><code>
+                        {
+                            "Name": "Test User",
+                            "Email": "test@user.com",
+                            "Password": "UserPassword-2020",
+                        }
+                    </code></pre>
+                </td>
+                <td>A text message indicating whether the account details were successfully updated</td>
+            </tr>
+
+            <tr>
+                <td>Delete an Account</td>
+                <td>/account/[id]</td>
+                <td>DELETE</td>
+                <td>NONE</td>
+                <td>A text message indicating whether the account details were successfully deleted</td>
+            </tr>
+
+            <tr>
+                <td>Add movie to favourites</td>
+                <td>/account/movies/[movie]</td>
+                <td>PUT</td>
+                <td>NONE</td>
+                <td>A text message indicating whether the movie was successfully added from the favourites list</td>
+            </tr>
+
+            <tr>
+                <td>Remove movie from favourites</td>
+                <td>/account/movies/[movie]</td>
+                <td>DELETE</td>
+                <td>NONE</td>
+                <td>A text message indicating whether the account details were successfully deleted</td>
+            </tr>
+
+        </table>
     </body>
 
 </html>
