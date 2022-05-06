@@ -14,6 +14,8 @@ _Developer: Simon Bertoli_
 - NodeJS
 - HTML5
 - Javascript
+- MongoDB
+- Mongoose
 
 <br/>
 
