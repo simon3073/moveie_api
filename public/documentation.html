@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>80s Movies</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-        <link href="../css/styles.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="../css/styles.css" type="text/css" />
     </head>
 
     <body>
@@ -17,210 +17,333 @@
         </p>
         <br>
         <h2>API Endpoints</h2>
-        <table class="api-table">
-            <tr>
-                <th>Request</th>
-                <th>URL</th>
-                <th>HTTP Method</th>
-                <th>Request body data format</th>
-                <th>Response body data format</th>
-            </tr>
-            <tr>
-                <td>Get a list of movies</td>
-                <td>/movies</td>
-                <td>GET</td>
-                <td>NONE</td>
-                <td>JSON Object holding data of all the movies</td>
-            </tr>
-            <tr>
-                <td>Get data about a movie</td>
-                <td>/movies/info/[movie]</td>
-                <td>GET</td>
-                <td>NONE</td>
-                <td>JSON Object holding data about a movie. Example:
-                    <pre><code>
-                        {
-                            "Title": "Planes, Trains & Automobiles",
-                            "Year Released": "1987",
-                            "Director": ["John Hughes",
-                            "Description": "A Chicago advertising man must struggle to travel home from 
-                                            New York for Thanksgiving, with a lovable oaf of a shower 
-                                            curtain ring salesman as his only companion."
-                            "imdbRating": 7.6,
-                            "imgURL": '...url.jpg',
-                            "Genre": [
-                                "Comedy", 
-                                "Drama"
-                            ],
-                            "Actor": [
-                                "John Candy",
-                                "Steve Martin"
-                            ]   
-                        }
-                        </code></pre>
-                </td>
-            </tr>
-            <tr>
-                <td>Get information about Director</td>
-                <td>/bio/[director]</td>
-                <td>GET</td>
-                <td>NONE</td>
-                <td>JSON Object holding bio data about director. Example
-                    <pre><code>
-                        {
-                            “Director”: “John Hughes”,
-                            “Born” : "03-18-1950"
-                            "Died" : "08-6-2009",
-                            "Movies directed": [
-                                "Planes, Trains & Automobiles",
-                                "16 Candles",
-                                "The Breakfast Club"
-                            ]
-                        }
-                    </code></pre>
-                </td>
-            </tr>
-            <tr>
-                <td>Search for movies with in a Genre</td>
-                <td>/movies/genre/[genre]</td>
-                <td>GET</td>
-                <td>NONE</td>
-                <td>JSON Object holding data about movies with a specific genre, including genre. Example
-                    <pre><code>
-                        {
-                            “Genre”: “Action”,
-                            “Movies” : [
-                                "Commando",
-                                "Karate Kid",
-                                "Rambo"
-                            ]
-                        }
+
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>GET</h2>
+                </div>
+                <div class="api-url">/movies</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Get a list of movies</p>
+                <h4>Request Body Data Format</h4>
+                <p>NONE</p>
+                <h4>Response Body Data Format</h4>
+                <p>JSON Object holding data of all the movies</p>
+            </div>
+        </div>
+
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>GET</h2>
+                </div>
+                <div class="api-url">/movies/info/[movie]</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Get data about a movie</p>
+                <h4>Request Body Data Format</h4>
+                <p>NONE</p>
+                <h4>Response Body Data Format</h4>
+                <p>JSON Object holding data of the movie requested, for example:
+                <pre><code>
+{
+    "Title": "Film Title",
+    "Year Released": "1987",
+    "Director": [Director_ID],
+    "Description": "Film Description"
+    "imdbRating": 7.6,
+    "imgURL": '...url.jpg',
+    "Genre": [ 
+        [GenreID], 
+        [GenreID]
+    ],
+    "Actor": [
+        [ActorID],
+        [ActorID]
+    ],
+}
                 </code></pre>
-                </td>
-            </tr>
-            <tr>
-                <td>Search for movies starring an Actor</td>
-                <td>/movies/actor/[actor]</td>
-                <td>GET</td>
-                <td>NONE</td>
-                <td>JSON Object holding data about movies with a specific actor, including actor. Example
-                    <pre><code>
-                        {
-                            “Actor”: “Molly Ringwald”,
-                            “Movies” : [
-                                "The Breakfast Club",
-                                "Pretty in Pink",
-                                "16 Candles"
-                            ]
-                        }
+                </p>
+            </div>
+        </div>
+
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>GET</h2>
+                </div>
+                <div class="api-url">/bio/[director]</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Get information about Director</p>
+                <h4>Request Body Data Format</h4>
+                <p>NONE</p>
+                <h4>Response Body Data Format</h4>
+                <p>JSON Object holding data of all the movies, for example:
+                <pre><code>
+{
+    "Name": “John Hughes”,
+    “Born” : "03-18-1950"
+    "Died" : "08-6-2009",
+    "Bio" : "A biography of the director",
+    "moviesDirected": [
+        [MovieID],
+        [MovieID]
+    ]
+}
                     </code></pre>
-                </td>
-            </tr>
-            <tr>
-                <td>Search movies with a certain IMDB Rating</td>
-                <td>/movies/rating/[rating]</td>
-                <td>GET</td>
-                <td>NONE</td>
-                <td>JSON Object holding data about movies with an IMDB rating above what has been provided, including
-                    rating. Example
-                    <pre><code>
-                        {
-                            “Rating”: “7”,
-                            “Movies” : [
-                                "Bull Durham"
-                                "Karate Kid",
-                                 "Commando"
-                            ]
-                        }
+
+                </p>
+            </div>
+        </div>
+
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>GET</h2>
+                </div>
+                <div class="api-url">/movies/genre/[genre]</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Search for movies with in a Genre</p>
+                <h4>Request Body Data Format</h4>
+                <p>NONE</p>
+                <h4>Response Body Data Format</h4>
+                <p>JSON Object holding data about movies with a specific genre, including genre, for example:
+                <pre><code>
+{
+    “Genre”: “Action”,
+    “Movies” : [
+        "Commando",
+        "Karate Kid",
+        "Rambo"
+    ]
+}
+                 </code></pre>
+                </p>
+            </div>
+        </div>
+
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>GET</h2>
+                </div>
+                <div class="api-url">/movies/actor/[actor]</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Search for movies starring an Actor</p>
+                <h4>Request Body Data Format</h4>
+                <p>NONE</p>
+                <h4>Response Body Data Format</h4>
+                <p>JSON Object holding data about movies with a specific actor, including actor, for example:
+                <pre><code>
+{
+    “Actor”: “Molly Ringwald”,
+    “Movies” : [
+        "The Breakfast Club",
+        "Pretty in Pink",
+        "16 Candles"
+    ]
+}
                     </code></pre>
-                </td>
-            </tr>
+                </p>
+            </div>
+        </div>
 
-            <tr>
-                <td>Create an Account</td>
-                <td>/account</td>
-                <td>POST</td>
-                <td>JSON Object holding data about a new user. Example:
-                    <pre><code>
-                        {
-                            "Name": "Test User",
-                            "Email": "test@user.com",
-                            "Password": "UserPassword-2020",
-                        }
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>GET</h2>
+                </div>
+                <div class="api-url">/movies/rating/[rating]</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Search movies with a certain IMDB Rating</p>
+                <h4>Request Body Data Format</h4>
+                <p>NONE</p>
+                <h4>Response Body Data Format</h4>
+                <p>JSON Object holding data about movies with an IMDB rating above what has been provided, including
+                    rating, for example:
+                <pre><code>
+{
+    “Rating”: “7”,
+    “Movies” : [
+        "Bull Durham"
+        "Karate Kid",
+        "Commando"
+    ]
+}
+                                    </code></pre>
+                </p>
+            </div>
+        </div>
+
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>POST</h2>
+                </div>
+                <div class="api-url">/account</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Create an account</p>
+                <h4>Request Body Data Format</h4>
+                <p>JSON Object holding data about a new user:
+                <pre><code>
+{
+    "Username" : "username",
+    "Email" : "useremail@email.com",
+    "Password" : "password2022",
+    "Birthday" : "2000-01-01T00:00:00Z"
+}
                     </code></pre>
-                </td>
-                <td>JSON Object holding data about the new user added, including an ID. Example
-                    <pre><code>
-                        {
-                            “id”: 8,
-                            “Name” : “John Smith”,
-                            “Email” : “johnsmith@email.com”,
-                            “Password” : “purpleMonkey-84”,
-                            “Favourite-movies” : []
-                        }
+                </p>
+                <h4>Response Body Data Format</h4>
+                <p>JSON Object holding data about the new user added, for example:
+                <pre><code>
+{
+    "Username" : "username",
+    "Email" : "useremail@email.com",
+    "Password" : "password2022",
+    "Birthday" : "2000-01-01T00:00:00Z"
+    “Favourite-movies” : []
+}
                     </code></pre>
-                </td>
-            </tr>
+                </p>
+            </div>
+        </div>
 
-            <tr>
-                <td>Get account details</td>
-                <td>/account/[id]</td>
-                <td>GET</td>
-                <td>NONE</td>
-                <td>JSON Object holding data about the logged in user, including an ID. Example
-                    <pre><code>
-                        {
-                           “id”: 8,
-                            “Name” : “John Smith”,
-                            “Email” : “johnsmith@email.com”,
-                            “Password” : “purpleMonkey-84”,
-                            “Favourite-movies” : []
-                        }
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>GET</h2>
+                </div>
+                <div class="api-url">/account/[username]</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Get account details</p>
+                <h4>Request Body Data Format</h4>
+                <p>NONE</p>
+                <h4>Response Body Data Format</h4>
+                <p>JSON Object holding data about the logged in user, including an ObjectId, for example:
+                <pre><code>
+{
+    “id”: ObjectId("00000"),
+    "Username" : "username",
+    "Email" : "useremail@email.com",
+    "Password" : "password2022",
+    "Birthday" : "2000-01-01T00:00:00Z"
+    “Favourite-movies” : [
+        [MovieID],
+        [MovieID]
+    ]
+}
+                                    </code></pre>
+                </p>
+            </div>
+        </div>
+
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>PUT</h2>
+                </div>
+                <div class="api-url">/account/[username]</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Update account details</p>
+                <h4>Request Body Data Format</h4>
+                <p>JSON Object holding data about a new user. Example:
+                <pre><code>
+{
+    "Username" : "testuserUpdate",
+    "Email" : "testuser@email.com",
+    "Password" : "justtesting99",
+    "Birthday" : "1977-05-25T00:00:00Z"
+}
+                                    </code></pre>
+                </p>
+                <h4>Response Body Data Format</h4>
+                <p>JSON Object holding data about the user updated, including an ObjectId, for example:
+                <pre><code>
+{
+    “id”: ObjectId("00000"),
+    "Username" : "testuserUpdate",
+    "Email" : "testuser@email.com",
+    "Password" : "justtesting99",
+    "Birthday" : "1977-05-25T00:00:00Z"
+    “Favourite-movies” : [
+        [MovieID],
+        [MovieID]
+    ]
+}
                     </code></pre>
-                </td>
-            </tr>
+                </p>
+            </div>
+        </div>
 
-            <tr>
-                <td>Update an Account</td>
-                <td>/account/[id]</td>
-                <td>PUT</td>
-                <td>JSON Object holding data about a new user. Example:
-                    <pre><code>
-                        {
-                            "Name": "Test User",
-                            "Email": "test@user.com",
-                            "Password": "UserPassword-2020",
-                        }
-                    </code></pre>
-                </td>
-                <td>A text message indicating whether the account details were successfully updated</td>
-            </tr>
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>DELETE</h2>
+                </div>
+                <div class="api-url">/account/[username]</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Update account details</p>
+                <h4>Request Body Data Format</h4>
+                <p>NONE</p>
+                <h4>Response Body Data Format</h4>
+                <p>A text message indicating whether the account was successfully deleted</p>
+            </div>
+        </div>
 
-            <tr>
-                <td>Delete an Account</td>
-                <td>/account/[id]</td>
-                <td>DELETE</td>
-                <td>NONE</td>
-                <td>A text message indicating whether the account details were successfully deleted</td>
-            </tr>
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>PUT</h2>
+                </div>
+                <div class="api-url">/account/movies/[movie]</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Add a movie to a users favourites</p>
+                <h4>Request Body Data Format</h4>
+                <p>NONE</p>
+                <h4>Response Body Data Format</h4>
+                <p>A text message indicating whether the movie was successfully added from the favourites list</p>
+            </div>
+        </div>
 
-            <tr>
-                <td>Add movie to favourites</td>
-                <td>/account/movies/[movie]</td>
-                <td>PUT</td>
-                <td>NONE</td>
-                <td>A text message indicating whether the movie was successfully added from the favourites list</td>
-            </tr>
-
-            <tr>
-                <td>Remove movie from favourites</td>
-                <td>/account/movies/[movie]</td>
-                <td>DELETE</td>
-                <td>NONE</td>
-                <td>A text message indicating whether the account details were successfully deleted</td>
-            </tr>
-
-        </table>
+        <div class="api">
+            <div class="api-request">
+                <div class="api-method">
+                    <h2>DELETE</h2>
+                </div>
+                <div class="api-url">/account/movies/[movie]</div>
+            </div>
+            <hr>
+            <div class="api-info">
+                <p class="api-purpose">Remove a movie from a users favourites</p>
+                <h4>Request Body Data Format</h4>
+                <p>NONE</p>
+                <h4>Response Body Data Format</h4>
+                <p>A text message indicating whether the account details were successfully deleted/p>
+            </div>
+        </div>
     </body>
 
 </html>
