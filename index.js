@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const morgan = require('morgan');
 const app = express();
+const cors = require('cors');
+const { check, validationResult } = require('express-validator');
 
 // Mongoose Imports to set-up schemas and query db
 const mongoose = require('mongoose');
@@ -27,7 +29,22 @@ app.use(morgan('combined', { stream: accessLog }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Import Authorisation
+// Import Authorisation & cors
+const allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+app.use(
+	cors({
+		origin: (origin, callback) => {
+			if (!origin) return callback(null, true);
+			if (allowedOrigins.indexOf(origin) === -1) {
+				// If a specific origin isn’t found on the list of allowed origins
+				let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
+				return callback(new Error(message), false);
+			}
+			return callback(null, true);
+		}
+	})
+);
+
 let auth = require('./auth')(app); // (app) added to pass Express to auth.js
 const passport = require('passport');
 require('./passport');
@@ -138,7 +155,12 @@ app.get('/movies/rating/:rating', passport.authenticate('jwt', { session: false 
 });
 
 //  Create an account
-app.post('/account', (req, res) => {
+app.post('/account', [check('Username', 'Username is required').isLength({ min: 8 }), check('Username', 'Username contains non alphanumeric chars - not allowed').isAlphanumeric(), check('Password', 'Password is required').not().isEmpty(), check('Email', 'Email does not appear to be valid').isEmail()], (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(422).json({ errors: errors.array() });
+	}
+	const hashedPassword = User.hashPassword(req.body.Password); // Hash any password before creating an account
 	User.findOne({ Username: req.body.Username })
 		.then((user) => {
 			if (user) {
@@ -147,7 +169,7 @@ app.post('/account', (req, res) => {
 				User.create({
 					Username: req.body.Username,
 					Email: req.body.Email,
-					Password: req.body.Password,
+					Password: hashedPassword,
 					Birthday: req.body.Birthday,
 					FaveMovies: []
 				})
@@ -277,6 +299,7 @@ app.delete('/account/:username/movies/:movie', passport.authenticate('jwt', { se
 app.use(express.static('public'));
 
 // listen for requests
-app.listen(8080, () => {
-	console.log('Your app is listening on Port 8080');
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0', () => {
+	console.log(`Listening on Port ${port}`);
 });

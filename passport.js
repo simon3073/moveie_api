@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const Models = require('./models.js');
 const passportJWT = require('passport-jwt');
 
-const Users = Models.User;
+const User = Models.User;
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
@@ -16,14 +16,20 @@ passport.use(
 		},
 		(username, password, callback) => {
 			console.log(`${username} ${password}`);
-			Users.findOne({ Username: username }, (error, user) => {
+			User.findOne({ Username: username }, (error, user) => {
 				if (error) {
 					console.log(error);
 					return callback(error);
 				}
 				if (!user) {
 					console.log('Incorrect username');
-					return callback(null, false, { message: 'Incorrect username or password' });
+					return callback(null, false, { message: 'Incorrect username' });
+				}
+
+				if (!user.validatePassword(password)) {
+					// check saved hashed password against provided hashed password on login
+					console.log('Incorrect Password');
+					return callback(null, false, { message: 'Incorrect password' });
 				}
 				console.log('Finished');
 				return callback(null, user);
@@ -40,7 +46,7 @@ passport.use(
 			secretOrKey: 'your_jwt_secret'
 		},
 		(jwtPayload, callback) => {
-			return Users.findById(jwtPayload._id)
+			return User.findById(jwtPayload._id)
 				.then((user) => {
 					return callback(null, user);
 				})
