@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const fs = require('fs');
+const path = require('path');
 const morgan = require('morgan');
 const app = express();
 
@@ -9,18 +10,34 @@ const mongoose = require('mongoose');
 const Models = require('./models');
 const Movies = Models.Movie;
 const User = Models.User;
+const Director = Models.Director;
+const Actor = Models.Actor;
+const Genre = Models.Genre;
+
 mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // GET REQUESTS
 
 // Morgan logging to Terminal
+const accessLog = fs.createWriteStream(path.join(__dirname, 'log.txt'), { flags: 'a' });
 app.use(morgan('common'));
+app.use(morgan('combined', { stream: accessLog }));
+
+// to parse body to JSON
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Import Authorisation
+let auth = require('./auth')(app); // (app) added to pass Express to auth.js
+const passport = require('passport');
+require('./passport');
+
 // Return a json list of all the movies
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Movies.find()
+		.populate('Genre')
+		.populate('Actor')
+		.populate('Director')
 		.then((movies) => {
 			res.status(201).json(movies);
 		})
@@ -31,8 +48,12 @@ app.get('/movies', (req, res) => {
 });
 
 // Return a specific movie's details list of all the movies
-app.get('/movies/info/:movie', (req, res) => {
-	Movies.findOne({ Title: req.params.movie })
+app.get('/movies/info/:movie', passport.authenticate('jwt', { session: false }), (req, res) => {
+	const capitalisedSearchTerm = req.params.movie.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+	Movies.findOne({ Title: capitalisedSearchTerm })
+		.populate('Genre')
+		.populate('Actor')
+		.populate('Director')
 		.then((movie) => {
 			res.status(201).json(movie);
 		})
@@ -43,35 +64,80 @@ app.get('/movies/info/:movie', (req, res) => {
 });
 
 // Return a directors bio
-app.get('/bio/:director', (req, res) => {
-	res.send('Return a directors bio');
+app.get('/movies/director/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
+	const capitalisedSearchTerm = req.params.name.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+	Director.findOne({ Name: capitalisedSearchTerm })
+		.populate('moviesDirected')
+		.then((director) => {
+			res.status(201).json(director);
+		})
+		.catch((err) => {
+			console.error(err);
+			res.status(500).send(`Error: ${err}`);
+		});
 });
 
 // Return movies of a genre
-app.get('/movies/genre/:genre', (req, res) => {
-	res.send('Return movies of a genre');
+app.get('/movies/genre/:genre', passport.authenticate('jwt', { session: false }), (req, res) => {
+	const capitalisedSearchTerm = req.params.genre.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+	Genre.findOne({ Genre: capitalisedSearchTerm })
+		.then((genre) => {
+			Movies.find({ Genre: genre._id })
+				.populate('Genre')
+				.populate('Actor')
+				.populate('Director')
+				.then((movies) => {
+					if (movies.length === 0) {
+						res.status(204).send(`There were no movies in the genre of ${capitalisedSearchTerm}`);
+					} else {
+						res.status(201).json(movies);
+					}
+				})
+				.catch((err) => {
+					console.error(err);
+					res.status(500).send(`Error: ${err}`);
+				});
+		})
+		.catch((err) => {
+			console.error(err);
+			res.status(500).send(`Error: ${err}`);
+		});
 });
 
-// Return movies with an actor
-app.get('/movies/actor/:name', (req, res) => {
-	res.send('Return movies with an actor');
+// Return an actor bio
+app.get('/movies/actor/:name', passport.authenticate('jwt', { session: false }), (req, res) => {
+	const capitalisedSearchTerm = req.params.name.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+	Actor.findOne({ Name: capitalisedSearchTerm })
+		.populate('Movies')
+		.then((actor) => {
+			res.status(201).json(actor);
+		})
+		.catch((err) => {
+			console.error(err);
+			res.status(500).send(`Error: ${err}`);
+		});
 });
 
 // Return movies with a minimum rating no
-app.get('/movies/rating/:rating', (req, res) => {
-	res.send('Return movies with a minimum rating number');
+app.get('/movies/rating/:rating', passport.authenticate('jwt', { session: false }), (req, res) => {
+	Movies.find({ imdbRating: { $gte: req.params.rating } })
+		.populate('Genre')
+		.populate('Actor')
+		.populate('Director')
+		.then((movies) => {
+			if (movies.length === 0) {
+				res.status(204).send(`There were no movies with a IMDB rating of ${req.params.rating} or above`);
+			} else {
+				res.status(201).json(movies);
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+			res.status(500).send(`Error: ${err}`);
+		});
 });
 
-/*  Create an account 
-Expecting JSON format like below 
-{
-    "Username" : "username",
-    "Email" : "useremail@email.com",
-    "Password" : "password2022",
-    "Birthday" : "2000-01-01T00:00:00Z"
-}
-*/
-
+//  Create an account
 app.post('/account', (req, res) => {
 	User.findOne({ Username: req.body.Username })
 		.then((user) => {
@@ -101,9 +167,9 @@ app.post('/account', (req, res) => {
 });
 
 // get account details
-app.get('/account/:username', (req, res) => {
-	//res.send('Get account details');
+app.get('/account/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
 	User.findOne({ Username: req.params.username })
+		.populate('FaveMovies')
 		.then((user) => {
 			res.status(201).json(user);
 		})
@@ -114,7 +180,7 @@ app.get('/account/:username', (req, res) => {
 });
 
 // Update Account details
-app.put('/account/:username', (req, res) => {
+app.put('/account/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
 	User.findOneAndUpdate(
 		{ Username: req.params.username },
 		{
@@ -137,8 +203,8 @@ app.put('/account/:username', (req, res) => {
 	);
 });
 
-// Deregister an account
-app.delete('/account/:username', (req, res) => {
+// Delete an account
+app.delete('/account/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
 	User.findOneAndRemove({ Username: req.params.username })
 		.then((user) => {
 			if (!user) {
@@ -154,13 +220,57 @@ app.delete('/account/:username', (req, res) => {
 });
 
 // Add movie to list
-app.put('/account/movies/:movie', (req, res) => {
-	res.send('Add movie to account list');
+app.put('/account/:username/movies/:movie', passport.authenticate('jwt', { session: false }), (req, res) => {
+	const capitalisedMovieParam = req.params.movie.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+	User.findOne({ Username: req.params.username })
+		.then((user) => {
+			Movies.findOne({ Title: capitalisedMovieParam })
+				.then((movie) => {
+					User.updateOne({ Username: user.Username }, { $addToSet: { FaveMovies: movie._id } })
+						.then((user) => {
+							res.status(200).send(`You added the movie ${capitalisedMovieParam} to your favourites list`);
+						})
+						.catch((err) => {
+							console.error(err);
+							res.status(500).send(`Error: ${err}`);
+						});
+				})
+				.catch((err) => {
+					console.error(err);
+					res.status(500).send(`Error: ${err}`);
+				});
+		})
+		.catch((err) => {
+			console.error(err);
+			res.status(500).send(`Error: ${err}`);
+		});
 });
 
-// Remove movie form account list
-app.delete('/account/movies/:movie', (req, res) => {
-	res.send('Remove movie from account list');
+// Delete movie from list
+app.delete('/account/:username/movies/:movie', passport.authenticate('jwt', { session: false }), (req, res) => {
+	const capitalisedMovieParam = req.params.movie.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+	User.findOne({ Username: req.params.username })
+		.then((user) => {
+			Movies.findOne({ Title: capitalisedMovieParam })
+				.then((movie) => {
+					User.updateOne({ Username: user.Username }, { $pull: { FaveMovies: movie._id } })
+						.then((user) => {
+							res.status(200).send(`You removed the movie ${capitalisedMovieParam} to your favourites list`);
+						})
+						.catch((err) => {
+							console.error(err);
+							res.status(500).send(`Error: ${err}`);
+						});
+				})
+				.catch((err) => {
+					console.error(err);
+					res.status(500).send(`Error: ${err}`);
+				});
+		})
+		.catch((err) => {
+			console.error(err);
+			res.status(500).send(`Error: ${err}`);
+		});
 });
 
 // Serve files from Public Folder

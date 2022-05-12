@@ -76,7 +76,7 @@
                 <div class="api-method">
                     <h2>GET</h2>
                 </div>
-                <div class="api-url">/bio/[director]</div>
+                <div class="api-url">/movies/director/[director]</div>
             </div>
             <hr>
             <div class="api-info">
@@ -92,8 +92,9 @@
     "Died" : "08-6-2009",
     "Bio" : "A biography of the director",
     "moviesDirected": [
-        [MovieID],
-        [MovieID]
+        "The Breakfast Club",
+        "Pretty in Pink",
+        "16 Candles"
     ]
 }
                     </code></pre>
@@ -147,6 +148,9 @@
                 <pre><code>
 {
     “Actor”: “Molly Ringwald”,
+    “Born” : "1968"
+    "Bio" : "A biography of the actor",
+    "imgURL" "../img.jpg"
     “Movies” : [
         "The Breakfast Club",
         "Pretty in Pink",
@@ -316,7 +320,7 @@
                 <div class="api-method">
                     <h2>PUT</h2>
                 </div>
-                <div class="api-url">/account/movies/[movie]</div>
+                <div class="api-url">/account/[username]/movies/[movie]</div>
             </div>
             <hr>
             <div class="api-info">
@@ -333,7 +337,7 @@
                 <div class="api-method">
                     <h2>DELETE</h2>
                 </div>
-                <div class="api-url">/account/movies/[movie]</div>
+                <div class="api-url">/account/[username]/movies/[movie]</div>
             </div>
             <hr>
             <div class="api-info">
