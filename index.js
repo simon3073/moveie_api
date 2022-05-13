@@ -19,6 +19,7 @@ const Genre = Models.Genre;
 // for localhost
 // mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
 // for MongoDB Cloud Deployment
+//
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // GET REQUESTS
