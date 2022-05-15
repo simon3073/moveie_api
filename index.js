@@ -19,7 +19,6 @@ const Genre = Models.Genre;
 // for localhost
 // mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
 // for MongoDB Cloud Deployment
-//
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // GET REQUESTS
@@ -159,7 +158,7 @@ app.get('/movies/rating/:rating', passport.authenticate('jwt', { session: false 
 });
 
 //  Create an account
-app.post('/account', [check('Username', 'Username is required').isLength({ min: 8 }), check('Username', 'Username contains non alphanumeric chars - not allowed').isAlphanumeric(), check('Password', 'Password is required').not().isEmpty(), check('Email', 'Email does not appear to be valid').isEmail()], (req, res) => {
+app.post('/register', [check('Username', 'Username is required').isLength({ min: 4 }), check('Username', 'Username contains non alphanumeric chars - not allowed').isAlphanumeric(), check('Password', 'Password is required').not().isEmpty(), check('Email', 'Email does not appear to be valid').isEmail()], (req, res) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		return res.status(422).json({ errors: errors.array() });
