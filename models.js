@@ -44,8 +44,7 @@ let actorsSchema = mongoose.Schema({
 	Bio: { type: String, required: true },
 	Born: { type: String, required: true },
 	imgURL: String,
-	Movies: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }],
-	MovieNames: []
+	Movies: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }]
 });
 
 let genresSchema = mongoose.Schema({

@@ -15,3 +15,5 @@
 127.0.0.1 - - [15/May/2022:23:06:11 +0000] "POST /register HTTP/1.1" 400 24 "-" "PostmanRuntime/7.29.0"
 127.0.0.1 - - [15/May/2022:23:06:21 +0000] "POST /register HTTP/1.1" 201 223 "-" "PostmanRuntime/7.29.0"
 127.0.0.1 - - [15/May/2022:23:12:57 +0000] "POST /login HTTP/1.1" 200 691 "-" "PostmanRuntime/7.29.0"
+127.0.0.1 - - [15/May/2022:23:27:45 +0000] "GET /movies/ HTTP/1.1" 401 - "-" "PostmanRuntime/7.29.0"
+127.0.0.1 - - [15/May/2022:23:28:12 +0000] "GET /movies/ HTTP/1.1" 201 12918 "-" "PostmanRuntime/7.29.0"
