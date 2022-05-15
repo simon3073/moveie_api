@@ -10,3 +10,4 @@
 127.0.0.1 - - [15/May/2022:22:54:20 +0000] "GET /css/styles.css HTTP/1.1" 304 - "http://127.0.0.1:8080/documentation.html" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36"
 127.0.0.1 - - [15/May/2022:22:54:24 +0000] "GET /index.html HTTP/1.1" 404 149 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36"
 127.0.0.1 - - [15/May/2022:22:54:30 +0000] "GET / HTTP/1.1" 404 139 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36"
+127.0.0.1 - - [15/May/2022:22:58:42 +0000] "POST /register HTTP/1.1" 201 223 "-" "PostmanRuntime/7.29.0"
