@@ -1,6 +1,8 @@
 ## Movie API
 
 Movie API allows access to information movies from the 1980's. Users will be able to sign up, update their personal information, and create a list of their favorite 80's movies.
+
+This app is hosted on Heroku at https://movie-app-3073.herokuapp.com/
 <br/>
 
 <br />
@@ -16,6 +18,8 @@ _Developer: Simon Bertoli_
 - Javascript
 - MongoDB
 - Mongoose
+- MongoDB
+- Heroku
 
 <br/>
 

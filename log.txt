@@ -17,3 +17,7 @@
 127.0.0.1 - - [15/May/2022:23:12:57 +0000] "POST /login HTTP/1.1" 200 691 "-" "PostmanRuntime/7.29.0"
 127.0.0.1 - - [15/May/2022:23:27:45 +0000] "GET /movies/ HTTP/1.1" 401 - "-" "PostmanRuntime/7.29.0"
 127.0.0.1 - - [15/May/2022:23:28:12 +0000] "GET /movies/ HTTP/1.1" 201 12918 "-" "PostmanRuntime/7.29.0"
+127.0.0.1 - - [15/May/2022:23:33:31 +0000] "GET /movies/genre/action HTTP/1.1" 401 - "-" "PostmanRuntime/7.29.0"
+127.0.0.1 - - [15/May/2022:23:33:38 +0000] "POST /login HTTP/1.1" 200 691 "-" "PostmanRuntime/7.29.0"
+127.0.0.1 - - [15/May/2022:23:33:56 +0000] "GET /movies/genre/action HTTP/1.1" 201 2479 "-" "PostmanRuntime/7.29.0"
+127.0.0.1 - - [15/May/2022:23:39:02 +0000] "GET / HTTP/1.1" 200 302 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36"
