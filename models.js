@@ -52,11 +52,11 @@ let genresSchema = mongoose.Schema({
 	_id: { type: Number, required: true }
 });
 
-let Movie = mongoose.model('Movie', movieSchema);
-let User = mongoose.model('User', userSchema);
-let Director = mongoose.model('Director', directorsSchema);
-let Actor = mongoose.model('Actor', actorsSchema);
-let Genre = mongoose.model('Genre', genresSchema);
+const Movie = mongoose.model('Movie', movieSchema);
+const User = mongoose.model('User', userSchema);
+const Director = mongoose.model('Director', directorsSchema);
+const Actor = mongoose.model('Actor', actorsSchema);
+const Genre = mongoose.model('Genre', genresSchema);
 
 module.exports.Movie = Movie;
 module.exports.User = User;

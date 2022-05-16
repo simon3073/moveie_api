@@ -17,9 +17,9 @@ const Actor = Models.Actor;
 const Genre = Models.Genre;
 
 // for localhost
-//mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
 // for MongoDB Cloud Deployment
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // GET REQUESTS
 
@@ -48,7 +48,7 @@ app.use(
 	})
 );
 
-let auth = require('./auth')(app); // (app) added to pass Express to auth.js
+const auth = require('./auth')(app); // (app) added to pass Express to auth.js
 const passport = require('passport');
 require('./passport');
 
