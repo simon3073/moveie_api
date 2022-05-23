@@ -18,8 +18,10 @@ module.exports = (router) => {
 		passport.authenticate('local', { session: false }, (error, user, info) => {
 			if (error || !user) {
 				// If there has been an error or the user cannot be found
+				console.error(error);
 				return res.status(400).json({
-					message: 'Something is not right',
+					message: `Sorry, this user's login details cannot be found`,
+					error: error,
 					user: user
 				});
 			}
@@ -27,7 +29,7 @@ module.exports = (router) => {
 				if (error) {
 					res.send(error); // error check to stop anything
 				}
-				let token = generateJWTToken(user.toJSON()); // if a username/password match has been found < create a JWT Token
+				const token = generateJWTToken(user.toJSON()); // if a username/password match has been found < create a JWT Token
 				return res.json({ user, token }); // ES6 Shorthand
 			});
 		})(req, res);

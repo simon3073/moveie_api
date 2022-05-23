@@ -18,7 +18,7 @@ let userSchema = mongoose.Schema({
 	Password: { type: String, required: true },
 	Email: { type: String, required: true },
 	Birthday: Date,
-	FaveMovies: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }]
+	FavouriteMovies: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }]
 });
 
 userSchema.statics.hashPassword = (password) => {
@@ -35,7 +35,7 @@ let directorsSchema = mongoose.Schema({
 	Bio: { type: String, required: true },
 	Born: { type: String, required: true },
 	Died: String,
-	moviesDirected: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }]
+	MoviesDirected: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }]
 });
 
 let actorsSchema = mongoose.Schema({
