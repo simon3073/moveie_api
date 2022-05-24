@@ -68,7 +68,8 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), async (req,
 });
 
 // Return a specific movie's details
-app.get('/movies/info/:movie', passport.authenticate('jwt', { session: false }), async (req, res) => {
+// app.get('/movies/info/:movie', passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.get('/movies/info/:movie', async (req, res) => {
 	try {
 		const capitalisedSearchTerm = capitaliseTerm(req.params.movie);
 		const movie = await Movies.findOne({ Title: capitalisedSearchTerm }).populate('Genre').populate('Actor').populate('Director').exec();
