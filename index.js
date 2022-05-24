@@ -18,9 +18,9 @@ const Actor = Models.Actor;
 const Genre = Models.Genre;
 
 // for localhost
-mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
 // for MongoDB Cloud Deployment
-//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Function using RegExp to capitalise all search requests for Names and Movies
 const capitaliseTerm = (term) => {
