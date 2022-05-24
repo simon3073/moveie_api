@@ -57,7 +57,8 @@ app.use(
 );
 
 // Return a json list of all the movies
-app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.get('/movies', async (req, res) => {
+	//app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const movies = await Movies.find().populate('Genre').populate('Actor').populate('Director').exec();
 		res.status(201).json(movies);
@@ -68,8 +69,7 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), async (req,
 });
 
 // Return a specific movie's details
-// app.get('/movies/info/:movie', passport.authenticate('jwt', { session: false }), async (req, res) => {
-app.get('/movies/info/:movie', async (req, res) => {
+app.get('/movies/info/:movie', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const capitalisedSearchTerm = capitaliseTerm(req.params.movie);
 		const movie = await Movies.findOne({ Title: capitalisedSearchTerm }).populate('Genre').populate('Actor').populate('Director').exec();
