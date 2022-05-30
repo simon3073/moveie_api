@@ -41,7 +41,7 @@ const auth = require('./auth')(app); // (app) added to pass Express to auth.js
 const passport = require('passport');
 
 // Import Authorisation & cors
-const allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234'];
+const allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'https://simon3073.github.io/movie_api_client/'];
 app.use(
 	cors({
 		origin: (origin, callback) => {
