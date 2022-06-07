@@ -22,23 +22,6 @@ const Genre = Models.Genre;
 // for MongoDB Cloud Deployment
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// Import Authorisation & cors
-// const allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'https://simon3073.github.io/'];
-// app.use(
-// 	cors({
-// 		origin: (origin, callback) => {
-// 			if (!origin) return callback(null, true);
-// 			if (allowedOrigins.indexOf(origin) === -1) {
-// 				// If a specific origin isn’t found on the list of allowed origins
-// 				let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
-// 				return callback(new Error(message), false);
-// 			}
-// 			return callback(null, true);
-// 		}
-// 	})
-// );
-app.use(cors());
-
 // Function using RegExp to capitalise all search requests for Names and Movies
 const capitaliseTerm = (term) => {
 	return term.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
@@ -56,6 +39,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Passport set up
 const auth = require('./auth')(app); // (app) added to pass Express to auth.js
 const passport = require('passport');
+
+// Import Authorisation & cors
+// const allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'https://simon3073.github.io/'];
+// app.use(
+// 	cors({
+// 		origin: (origin, callback) => {
+// 			if (!origin) return callback(null, true);
+// 			if (allowedOrigins.indexOf(origin) === -1) {
+// 				// If a specific origin isn’t found on the list of allowed origins
+// 				let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
+// 				return callback(new Error(message), false);
+// 			}
+// 			return callback(null, true);
+// 		}
+// 	})
+// );
+app.use(cors());
 
 // Return a json list of all the movies
 app.get('/movies', async (req, res) => {
