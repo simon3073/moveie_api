@@ -56,7 +56,7 @@ const passport = require('passport');
 // 	})
 // );
 
-app.use(cors({ origin: '*' }));
+app.use(cors());
 
 // Return a json list of all the movies
 app.get('/movies', async (req, res) => {
