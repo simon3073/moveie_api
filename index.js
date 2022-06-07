@@ -58,8 +58,7 @@ const auth = require('./auth')(app); // (app) added to pass Express to auth.js
 const passport = require('passport');
 
 // Return a json list of all the movies
-app.get('/movies', async (req, res) => {
-	//app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const movies = await Movies.find().populate('Genre').populate('Actor').populate('Director').exec();
 		res.status(201).json(movies);
