@@ -180,13 +180,14 @@ app.get('/account/:username', passport.authenticate('jwt', { session: false }), 
 
 // Update Account details
 app.put('/account/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
+	const hashedPassword = User.hashPassword(req.body.Password);
 	User.findOneAndUpdate(
 		{ Username: req.params.username },
 		{
 			$set: {
 				Username: req.body.Username,
 				Email: req.body.Email,
-				Password: req.body.Password,
+				Password: hashedPassword,
 				Birthday: req.body.Birthday
 			}
 		},
@@ -215,19 +216,6 @@ app.delete('/account/:username', passport.authenticate('jwt', { session: false }
 		console.error(error);
 		res.status(500).send(`Error: ${error}`);
 	}
-
-	// User.findOneAndRemove({ Username: req.params.username })
-	// 	.then((user) => {
-	// 		if (!user) {
-	// 			res.status(400).send(`${req.params.username} could not be found`);
-	// 		} else {
-	// 			res.status(200).send(`${req.params.username} was deregistered`);
-	// 		}
-	// 	})
-	// 	.catch((err) => {
-	// 		console.error(err);
-	// 		res.status(500).send(`Error: ${err}`);
-	// 	});
 });
 
 // Add movie to list
