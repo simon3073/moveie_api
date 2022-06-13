@@ -219,7 +219,7 @@ app.delete('/account/:username', passport.authenticate('jwt', { session: false }
 });
 
 // Add movie to list
-app.put('/account/:username/movies/:movie', passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.put('/account/:username/movies/:movie', async (req, res) => {
 	try {
 		const capitalisedMovieParam = capitaliseTerm(req.params.movie);
 		const user = await User.findOne({ Username: req.params.username }).exec();
