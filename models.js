@@ -34,6 +34,7 @@ let directorsSchema = mongoose.Schema({
 	Name: { type: String, required: true },
 	Bio: { type: String, required: true },
 	Born: { type: String, required: true },
+	imgURL: String,
 	Died: String,
 	MoviesDirected: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }]
 });
