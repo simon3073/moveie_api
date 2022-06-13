@@ -225,7 +225,7 @@ app.put('/account/:username/movies/:movie', passport.authenticate('jwt', { sessi
 		const user = await User.findOne({ Username: req.params.username }).exec();
 		const movie = await Movies.findOne({ Title: capitalisedMovieParam }).exec();
 		await User.updateOne({ Username: user.Username }, { $addToSet: { FavouriteMovies: movie._id } }).exec();
-		res.status(200).send(`You added the movie ${capitalisedMovieParam} to your favourites list`);
+		res.status(200).json(FavouriteMovies);
 	} catch (error) {
 		console.error(error);
 		res.status(500).send(`Error: ${error}`);
