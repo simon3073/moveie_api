@@ -23,7 +23,8 @@ const Genre = Models.Genre;
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Import Authorisation & cors
-const allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'https://simon3073.github.io/'];
+
+const allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'https://simon3073.github.io'];
 app.use(
 	cors({
 		origin: (origin, callback) => {
