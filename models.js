@@ -8,6 +8,8 @@ let movieSchema = mongoose.Schema({
 	Description: { type: String, required: true },
 	imdbRating: { type: Number, required: true },
 	imgURL: String,
+	imgURL_thumb: String,
+	imgURL_load: String,
 	Genre: [{ type: mongoose.Schema.Types.Number, ref: 'Genre' }],
 	Actor: [{ type: mongoose.Schema.Types.Number, ref: 'Actor' }],
 	Director: [{ type: mongoose.Schema.Types.Number, ref: 'Director' }]
