@@ -5,7 +5,6 @@ const path = require('path');
 const morgan = require('morgan');
 const app = express();
 const cors = require('cors');
-const { check, validationResult } = require('express-validator');
 require('./passport');
 
 // Mongoose Imports to set-up schemas and query db
@@ -18,7 +17,7 @@ const Actor = Models.Actor;
 const Genre = Models.Genre;
 
 // for localhost
-//mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
 // for MongoDB Cloud Deployment
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -134,33 +133,6 @@ app.get('/movies/rating/:rating', passport.authenticate('jwt', { session: false 
 			res.status(204).send(`There were no movies with a IMDB rating of ${req.params.rating} or above`);
 		} else {
 			res.status(201).json(movies);
-		}
-	} catch (error) {
-		console.error(error);
-		res.status(500).send(`Error: ${error}`);
-	}
-});
-
-//  Create an account
-app.post('/register', [check('Username', 'Username is required').isLength({ min: 4 }), check('Username', 'Username contains non alphanumeric chars - not allowed').isAlphanumeric(), check('Password', 'Password is required').not().isEmpty(), check('Email', 'Email does not appear to be valid').isEmail()], async (req, res) => {
-	try {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(422).json({ errors: errors.array() });
-		}
-		const hashedPassword = User.hashPassword(req.body.Password);
-		const user = await User.findOne({ Username: req.body.Username }).exec();
-		if (user) {
-			return res.status(400).send(`${req.body.Username} already exists`);
-		} else {
-			const newUser = await User.create({
-				Username: req.body.Username,
-				Email: req.body.Email,
-				Password: hashedPassword,
-				Birthday: req.body.Birthday,
-				FavouriteMovies: []
-			});
-			res.status(201).json(newUser);
 		}
 	} catch (error) {
 		console.error(error);
