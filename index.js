@@ -1,3 +1,7 @@
+/**
+ * express module requirement
+ * @const 
+ */
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
@@ -19,11 +23,11 @@ const Genre = Models.Genre;
 // for localhost
 // mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
 // for MongoDB Cloud Deployment
+
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Import Authorisation & cors
-
-const allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'http://localhost:4200',  'http://localhost:4201','https://simon3073.github.io', 'https://80s-movies-app.netlify.app'];
+const allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'http://localhost:4200', 'https://simon3073.github.io', 'https://80s-movies-app.netlify.app'];
 app.use(
 	cors({
 		origin: (origin, callback) => {
@@ -39,7 +43,13 @@ app.use(
 );
 // app.use(cors());
 
-// Function using RegExp to capitalise all search requests for Names and Movies
+
+/**
+  * This function receives a string (search term)
+  * and returns it in capital case
+  * @param {string} term The term being searched for
+  * @return {string} The term returned in Capital Case
+  */
 const capitaliseTerm = (term) => {
 	return term.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
 };
@@ -57,7 +67,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const auth = require('./auth')(app); // (app) added to pass Express to auth.js
 const passport = require('passport');
 
-// Return a json list of all the movies
+
+/**
+ * GET: Returns a list of ALL movies to the user
+ * populate return with Genre, Director and Actor data
+ * @async
+ * @function /movies
+ * @returns {Object[]} movies
+ * @requires passport
+ */
 app.get('/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const movies = await Movies.find().populate('Genre').populate('Actor').populate('Director').exec();
@@ -68,7 +86,14 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), async (req,
 	}
 });
 
-// Return a specific movie's details
+/**
+ * GET: Returns the information of a movie using :movie title in the url
+ * populate return with Genre, Director and Actor data
+ * @async
+ * @function /movies/info/:movie
+ * @returns {Object[]} movie
+ * @requires passport
+ */
 app.get('/movies/info/:movie', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const capitalisedSearchTerm = capitaliseTerm(req.params.movie);
@@ -80,7 +105,15 @@ app.get('/movies/info/:movie', passport.authenticate('jwt', { session: false }),
 	}
 });
 
-// Return a directors bio
+/**
+ * GET: Returns the information of a movies director using :director name in the url
+ * populate return with MoviesDirected data
+ * @async
+ * @function /movies/director/:name
+ * @returns {Object[]} director
+ * @requires passport
+ */
+
 app.get('/movies/director/:name', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const capitalisedSearchTerm = capitaliseTerm(req.params.name);
@@ -92,7 +125,14 @@ app.get('/movies/director/:name', passport.authenticate('jwt', { session: false 
 	}
 });
 
-// Return movies of a genre
+/**
+ * GET: Returns all movies with a genre identified using :genre name in the url
+ * populate return with Genre, Director and Actor data
+ * @async
+ * @function /movies/genre/:genre
+ * @returns {Object[]} movies
+ * @requires passport
+ */
 app.get('/movies/genre/:genre', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const capitalisedSearchTerm = capitaliseTerm(req.params.genre);
@@ -109,7 +149,14 @@ app.get('/movies/genre/:genre', passport.authenticate('jwt', { session: false })
 	}
 });
 
-// Return an actor bio
+/**
+ * GET: Returns the information of an actor using :name in the url
+ * populate return with Movie data
+ * @async
+ * @function /movies/actor/:name
+ * @returns {Object[]} director
+ * @requires passport
+ */
 app.get('/movies/actor/:name', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const capitalisedSearchTerm = capitaliseTerm(req.params.name);
@@ -121,7 +168,15 @@ app.get('/movies/actor/:name', passport.authenticate('jwt', { session: false }),
 	}
 });
 
-// Return movies with a minimum rating no
+/**
+ * GET: Returns movies with a minimum imdb rating identified in the :rating variable from the url
+ * populate return with Genre, Director and Actor data
+ * @async
+ * @function /movies/rating/:rating
+ * @returns {Object[]} movies
+ * @requires passport
+ */
+
 app.get('/movies/rating/:rating', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const movies = await Movies.find({ imdbRating: { $gte: req.params.rating } })
@@ -140,7 +195,15 @@ app.get('/movies/rating/:rating', passport.authenticate('jwt', { session: false 
 	}
 });
 
-// get account details
+
+/**
+ * GET: Returns user account information, identifying the user with the :name variable from the url
+ * populate return with Favourite Movies data
+ * @async
+ * @function /account/:username
+ * @returns {Object[]} user
+ * @requires passport
+ */
 app.get('/account/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const user = await User.findOne({ Username: req.params.username }).populate('FavouriteMovies').exec();
@@ -151,7 +214,18 @@ app.get('/account/:username', passport.authenticate('jwt', { session: false }), 
 	}
 });
 
-// Update Account details
+/**
+ * PUT: Update user account information, identifying the user with the :name variable from the url
+ * @async
+ * @typedef {object} showRequestBody
+ * @property {string} name this is name in request body
+ * @property {string} password this is password in request body
+ * @property {string} email this is email in request body
+ * @property {string} birthday this is birthday in request body
+ * @function /account/:username
+ * @returns {Object[]} updatedUser
+ * @requires passport
+ */
 app.put('/account/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
 	const hashedPassword = User.hashPassword(req.body.Password);
 	User.findOneAndUpdate(
@@ -176,7 +250,14 @@ app.put('/account/:username', passport.authenticate('jwt', { session: false }), 
 	);
 });
 
-// Delete an account
+/**
+ * DELETE: Delete a user account, identifying the user with the :name variable from the url
+ * populate return with Favourite Movies data
+ * @async
+ * @function /account/:username
+ * @returns {string}
+ * @requires passport
+ */
 app.delete('/account/:username', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const user = await User.findOneAndRemove({ Username: req.params.username });
@@ -191,7 +272,13 @@ app.delete('/account/:username', passport.authenticate('jwt', { session: false }
 	}
 });
 
-// Add movie to list
+/**
+ * PUT: Add a movie ID to the users favourites list, identifying the user with the :username variable and movie with the :movie variable from the url
+ * @async
+ * @function /account/:username/movies/:movie
+ * @returns {string}
+ * @requires passport
+ */
 app.put('/account/:username/movies/:movie', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const capitalisedMovieParam = capitaliseTerm(req.params.movie);
@@ -205,7 +292,13 @@ app.put('/account/:username/movies/:movie', passport.authenticate('jwt', { sessi
 	}
 });
 
-// Delete movie from list
+/**
+ * DELETE: Remove a movie ID from the users favourites list, identifying the user with the :username variable and movie with the :movie variable from the url
+ * @async
+ * @function /account/:username/movies/:movie
+ * @returns {object} []
+ * @requires passport
+ */
 app.delete('/account/:username/movies/:movie', passport.authenticate('jwt', { session: false }), async (req, res) => {
 	try {
 		const capitalisedMovieParam = capitaliseTerm(req.params.movie);

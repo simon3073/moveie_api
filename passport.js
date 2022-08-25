@@ -7,7 +7,6 @@ const User = Models.User;
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
-// referred to as local in the authenticate function
 passport.use(
 	new LocalStrategy(
 		{

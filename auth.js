@@ -3,6 +3,10 @@ const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const passport = require('passport');
 
+/** Express router providing user related routes
+ * @module models.js
+ * @requires Models
+ */
 const Models = require('./models');
 const User = Models.User;
 
@@ -15,6 +19,7 @@ const generateJWTToken = (user) => {
 		algorithm: 'HS256' // algorithm to encode the values
 	});
 };
+
 
 const passportAuth = (req, res) => {
 	passport.authenticate('local', { session: false }, (error, user) => {
@@ -38,13 +43,35 @@ const passportAuth = (req, res) => {
 };
 
 // Exported from and imported to the main "index.js" file to catch all /login requests
+
+
 module.exports = (router) => {
+	/**
+	 * POST: Login and Register a user account
+	 * @typedef {object} showRequestBody
+	 * @property {string} name this is name in request body
+	 * @property {string} password this is password in request body
+	 * @function /login
+	 * @param {Express.request} req
+	 * @param {Express.result} res
+	 */
 	router.post('/login', (req, res) => {
 		passportAuth(req, res);
 	});
 
+
+	/**
+	 * PUT: Update user account information, identifying the user with the :name variable from the url
+	 * @async
+	 * @typedef {object} showRequestBody
+	 * @property {string} name this is name in request body
+	 * @property {string} password this is password in request body
+	 * @property {string} email this is email in request body
+	 * @property {string} birthday this is birthday in request body
+	 * @param {Express.request} req
+	 * @param {Express.result} res
+	 */
 	router.post('/register', [check('Username', 'Username is required').isLength({ min: 4 }), check('Username', 'Username contains non alphanumeric chars - not allowed').isAlphanumeric(), check('Password', 'Password is required').not().isEmpty(), check('Email', 'Email does not appear to be valid').isEmail()], async (req, res) => {
-		console.log('register');
 		try {
 			const errors = validationResult(req);
 			if (!errors.isEmpty()) {
