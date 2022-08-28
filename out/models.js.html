@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
+/**
+ * movieSchema for each movie returned from /movies API
+ * @constructor Movie
+ */
+let movieSchema = mongoose.Schema({
+	_id: { type: Number, required: true },
+	Title: { type: String, required: true },
+	ReleaseYear: { type: Number, required: true },
+	Description: { type: String, required: true },
+	imdbRating: { type: Number, required: true },
+	imgURL: String,
+	imgURL_thumb: String,
+	imgURL_load: String,
+	Genre: [{ type: mongoose.Schema.Types.Number, ref: 'Genre' }],
+	Actor: [{ type: mongoose.Schema.Types.Number, ref: 'Actor' }],
+	Director: [{ type: mongoose.Schema.Types.Number, ref: 'Director' }]
+});
+
+/**
+ * userSchema for user data returned from /account/[username] API
+ * @constructor User
+ */
+let userSchema = mongoose.Schema({
+	Username: { type: String, required: true },
+	Password: { type: String, required: true },
+	Email: { type: String, required: true },
+	Birthday: Date,
+	FavouriteMovies: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }]
+});
+
+/**
+ * HashSyncs a password
+ * @constructor
+ * @param {string} password - The user password from login
+ * @return {hash} encrypted password
+ */
+userSchema.statics.hashPassword = (password) => {
+	return bcrypt.hashSync(password, 10);
+};
+
+/**
+ * compares hashed passwords
+ * @constructor
+ * @param {string} password - The user password from login
+ * @return {boolean} 0 (valid) -1 (not valid)
+ */
+userSchema.methods.validatePassword = function (password) {
+	return bcrypt.compareSync(password, this.Password);
+};
+
+/**
+ * directorsSchema for user data returned from /movies/director/[name] API
+ * @constructor Director
+ */
+let directorsSchema = mongoose.Schema({
+	_id: { type: Number, required: true },
+	Name: { type: String, required: true },
+	Bio: { type: String, required: true },
+	Born: { type: String, required: true },
+	imgURL: String,
+	Died: String,
+	MoviesDirected: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }]
+});
+
+
+/**
+ * actorsSchema for user data returned from /movies/actor/[name] API
+ * @constructor Actor
+ */
+let actorsSchema = mongoose.Schema({
+	_id: { type: Number, required: true },
+	Name: { type: String, required: true },
+	Bio: { type: String, required: true },
+	Born: { type: String, required: true },
+	imgURL: String,
+	Movies: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }]
+});
+
+/**
+ * genresSchema for user data returned from /movies/genre/[genre] API
+ * @constructor Genre
+ */
+let genresSchema = mongoose.Schema({
+	Genre: { type: String, required: true },
+	_id: { type: Number, required: true }
+});
+
+const Movie = mongoose.model('Movie', movieSchema);
+const User = mongoose.model('User', userSchema);
+const Director = mongoose.model('Director', directorsSchema);
+const Actor = mongoose.model('Actor', actorsSchema);
+const Genre = mongoose.model('Genre', genresSchema);
+
+module.exports.Movie = Movie;
+module.exports.User = User;
+module.exports.Director = Director;
+module.exports.Actor = Actor;
+module.exports.Genre = Genre;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="models.module_js.html">js</a></li></ul><h3>Classes</h3><ul><li><a href="Actor.html">Actor</a></li><li><a href="Director.html">Director</a></li><li><a href="Genre.html">Genre</a></li><li><a href="Movie.html">Movie</a></li><li><a href="User.html">User</a></li><li><a href="userSchema.methods.validatePassword.html">validatePassword</a></li><li><a href="userSchema.statics.hashPassword.html">hashPassword</a></li></ul><h3>Global</h3><ul><li><a href="global.html#/account/:username">/account/:username</a></li><li><a href="global.html#/account/:username/movies/:movie">/account/:username/movies/:movie</a></li><li><a href="global.html#/movies">/movies</a></li><li><a href="global.html#/movies/actor/:name">/movies/actor/:name</a></li><li><a href="global.html#/movies/director/:name">/movies/director/:name</a></li><li><a href="global.html#/movies/genre/:genre">/movies/genre/:genre</a></li><li><a href="global.html#/movies/info/:movie">/movies/info/:movie</a></li><li><a href="global.html#/movies/rating/:rating">/movies/rating/:rating</a></li><li><a href="global.html#capitaliseTerm">capitaliseTerm</a></li><li><a href="global.html#express">express</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Fri Aug 26 2022 09:36:38 GMT+1000 (Australian Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
