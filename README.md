@@ -18,7 +18,6 @@ _Developer: Simon Bertoli_
 - Javascript
 - MongoDB
 - Mongoose
-- MongoDB
 - Heroku
 
 <br/>
