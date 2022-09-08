@@ -10,6 +10,7 @@ const morgan = require('morgan');
 const app = express();
 const cors = require('cors');
 require('./passport');
+require('dotenv').config()
 
 // Mongoose Imports to set-up schemas and query db
 const mongoose = require('mongoose');
@@ -21,10 +22,9 @@ const Actor = Models.Actor;
 const Genre = Models.Genre;
 
 // for localhost
-// mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
+ mongoose.connect('mongodb://localhost:27017/moviedb', { useNewUrlParser: true, useUnifiedTopology: true });
 // for MongoDB Cloud Deployment
-
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Import Authorisation & cors
 const allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234', 'http://localhost:4200', 'https://simon3073.github.io', 'https://80s-movies-app.netlify.app'];
@@ -85,6 +85,8 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), async (req,
 		res.status(500).send(`Error: ${error}`);
 	}
 });
+
+
 
 /**
  * GET: Returns the information of a movie using :movie title in the url
@@ -271,6 +273,7 @@ app.delete('/account/:username', passport.authenticate('jwt', { session: false }
 		res.status(500).send(`Error: ${error}`);
 	}
 });
+
 
 /**
  * PUT: Add a movie ID to the users favourites list, identifying the user with the :username variable and movie with the :movie variable from the url

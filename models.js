@@ -1,6 +1,28 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+
+/**
+ * movieSchema for each movie returned from /movies API
+ * @constructor Movie
+ */
+let tokenSchema = mongoose.Schema({
+	userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "user",
+  },
+  token: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    expires: 3600,// this is the expiry time in seconds
+  },
+});
+
 /**
  * movieSchema for each movie returned from /movies API
  * @constructor Movie
@@ -28,6 +50,7 @@ let userSchema = mongoose.Schema({
 	Password: { type: String, required: true },
 	Email: { type: String, required: true },
 	Birthday: Date,
+	ResetToken: tokenSchema, 
 	FavouriteMovies: [{ type: mongoose.Schema.Types.Number, ref: 'Movie' }]
 });
 
@@ -88,12 +111,14 @@ let genresSchema = mongoose.Schema({
 	_id: { type: Number, required: true }
 });
 
+const Token = mongoose.model('Token', tokenSchema)
 const Movie = mongoose.model('Movie', movieSchema);
 const User = mongoose.model('User', userSchema);
 const Director = mongoose.model('Director', directorsSchema);
 const Actor = mongoose.model('Actor', actorsSchema);
 const Genre = mongoose.model('Genre', genresSchema);
 
+module.exports.Token = Token;
 module.exports.Movie = Movie;
 module.exports.User = User;
 module.exports.Director = Director;
