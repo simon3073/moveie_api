@@ -1,10 +1,7 @@
 const jwtSecret = 'your_jwt_secret'
 const jwt = require('jsonwebtoken')
-const sendEmail = require('./sendMail')
 const { check, validationResult } = require('express-validator')
 const passport = require('passport')
-const crypto = require('crypto')
-const bcrypt = require('bcrypt')
 
 /** Express router providing user related routes
  * @module models.js
@@ -12,7 +9,6 @@ const bcrypt = require('bcrypt')
  */
 const Models = require('./models')
 const User = Models.User
-const Token = Models.Token
 
 require('./passport')
 
@@ -45,39 +41,6 @@ const passportAuth = (req, res) => {
   })(req, res)
 }
 
-const sendResetEmail = async (user) => {
-  try {
-    await User.findOneAndUpdate(
-      { Username: user.Username },
-      { $unset: { ResetToken: '' } }
-    )
-    const resetToken = crypto.randomBytes(32).toString('hex')
-    const hash = bcrypt.hashSync(resetToken, 10)
-    const resetTokenObj = await new Token({
-      userId: user._id,
-      token: hash,
-      createdAt: Date.now(),
-    })
-    await User.findOneAndUpdate(
-      { Username: user.Username },
-      {
-        $set: {
-          ResetToken: resetTokenObj,
-        },
-      }
-    )
-    const link = `${process.env.CLIENT_URL}/passwordReset?token=${resetToken}&id=${user._id}`
-    sendEmail(
-      user.Email,
-      'Password Reset Request',
-      { name: user.Username, link: link },
-      './template/requestResetPassword.handlebars'
-    )
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 // Exported from and imported to the main "index.js" file to catch all /login requests
 module.exports = (router) => {
   /**
@@ -91,34 +54,6 @@ module.exports = (router) => {
    */
   router.post('/login', (req, res) => {
     passportAuth(req, res)
-  })
-
-  /**
-   * GET: Search for user based on email or username
-   * @async
-   * @function /account/:username
-   * @returns {Object[]} user
-   * @requires passport
-   */
-  router.get('/resetpassword', async (req, res) => {
-    try {
-      let user = await User.findOne({ Username: req.body.searchterm })
-      if (!user) {
-        user = await User.findOne({ Email: req.body.searchterm })
-        if (!user) {
-          res.status(400).send(`User could not be found`)
-        } else {
-          sendResetEmail(user)
-          res.status(200).send(`User found`)
-        }
-      } else {
-        sendResetEmail(user)
-        res.status(200).send(`User found`)
-      }
-    } catch (error) {
-      console.error(error)
-      res.status(500).send(`Error: ${error}`)
-    }
   })
 
   /**
