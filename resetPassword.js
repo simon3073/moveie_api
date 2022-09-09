@@ -54,17 +54,12 @@ module.exports = (router) => {
    * @requires passport
    */
   router.get('/resetpassword', async (req, res) => {
-    console.log(
-      '🚀 ~ file: resetPassword.js ~ line 59 ~ router.get ~ req.body.searchterm',
-      req.body.searchterm
-    )
-
     try {
       let user = await User.findOne({ Username: req.body.searchterm })
       if (!user) {
         user = await User.findOne({ Email: req.body.searchterm })
         if (!user) {
-          res.status(400).send(`User could not be found`)
+          res.status(401).send(`User could not be found`)
         } else {
           sendResetEmail(user)
           res.status(200).send(`User found`)
