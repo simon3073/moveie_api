@@ -54,6 +54,11 @@ module.exports = (router) => {
    * @requires passport
    */
   router.get('/resetpassword', async (req, res) => {
+    console.log(
+      '🚀 ~ file: resetPassword.js ~ line 59 ~ router.get ~ req.body.searchterm',
+      req.body.searchterm
+    )
+
     try {
       let user = await User.findOne({ Username: req.body.searchterm })
       if (!user) {
