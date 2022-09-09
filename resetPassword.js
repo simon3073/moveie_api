@@ -32,7 +32,7 @@ const sendResetEmail = async (user) => {
         },
       }
     )
-    const link = `${process.env.CLIENT_URL}passwordreset?token=${resetToken}&id=${user._id}`
+    const link = `${process.env.CLIENT_URL}passwordreset?token=${hash}&id=${user._id}`
     sendEmail(
       user.Email,
       'Password Reset Request',
