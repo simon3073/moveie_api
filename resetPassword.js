@@ -61,7 +61,7 @@ module.exports = (router) => {
         if (!user) {
           res
             .status(401)
-            .send('-' + req.body.searchterm + 'User could not be found')
+            .send('-' + req.body.searchterm + 'User could not be found!')
         } else {
           sendResetEmail(user)
           res.status(200).send(`User found`)
