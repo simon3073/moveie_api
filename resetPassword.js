@@ -46,14 +46,7 @@ const sendResetEmail = async (user) => {
 
 // Exported from and imported to the main "index.js" file to catch all /login requests
 module.exports = (router) => {
-  /**
-   * GET: Search for user based on email or username
-   * @async
-   * @function /account/:username
-   * @returns {Object[]} user
-   * @requires passport
-   */
-  router.get('/resetpassword', async (req, res) => {
+  router.post('/resetpassword', async (req, res) => {
     try {
       let user = await User.findOne({ Username: req.body.searchterm })
       if (!user) {
