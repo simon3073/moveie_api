@@ -69,7 +69,7 @@ module.exports = (router) => {
     }
   })
 
-  router.get('/validatetoken', async (req, res) => {
+  router.post('/validatetoken', async (req, res) => {
     User.findOne({
       'ResetToken.userId': req.body.userid,
       'ResetToken.token': req.body.token,
